@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Service;
+using System.ServiceModel;
 
 namespace WCFDemo
 {
@@ -12,6 +14,20 @@ namespace WCFDemo
 		public MainPage()
 		{
 			InitializeComponent();
+            GetData();
 		}
-	}
+
+        private void GetData()
+        {
+            BasicHttpBinding binding = new BasicHttpBinding();
+            EndpointAddress EndPoint = new EndpointAddress("http://192.168.60.157:88/booking");
+            Reservation r = new Reservation
+            {
+                HotelName = "HotelA"
+            };
+            HotelBookingServiceClient Cliente = new HotelBookingServiceClient(binding, EndPoint);
+            BookingResponse Result = Cliente.BookHotel(r);
+            lblResult.Text = Result.BookingReference.ToString();    
+        }
+    }
 }
